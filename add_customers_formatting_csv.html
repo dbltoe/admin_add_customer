@@ -19,7 +19,7 @@ th { text-align: left; }
 <body>
   <h2>Formatting a CSV File for Bulk Upload (Admin Add User, Zen Cart 2.0.0 - 3.0.0)</h2>
 
-  <p>The headings can be in any column-order as long as they are contained in first non-blank row of the uploaded file. This is deliberately a short list - just enough to get someone started. Every customer added, whether from this file or the single-entry form, starts <strong>pending</strong> and is always emailed an activation link (see the main readme's "How Activation Works" section) - there is no way to bulk-import an already-active customer with this tool. The heading values and their expected data are:</p>
+  <p>The headings can be in any column-order as long as they are contained in the first non-blank row of the uploaded file. This is deliberately a short list - just enough to get someone started. Every customer added, whether from this file or the single-entry form, starts <strong>pending</strong> and is always emailed an activation link (see the main readme's "How Activation Works" section) - there is no way to bulk-import an already-active customer with this tool. The heading values and their expected data are:</p>
   <table>
     <tr class="tHead">
       <th>Heading Title</th>
@@ -47,13 +47,13 @@ th { text-align: left; }
     </tr>
     <tr>
       <td>wholesale_level</td>
-      <td>Optional plain number for <em>Configuration-&gt;My Store-&gt;Wholesale Pricing</em> (only meaningful if that setting isn't <em>false</em>); matches the same field on your admin's <em>Customers</em> edit screen. Enter 0 (or leave the column blank/missing) for none, or a number matching the wholesale settings already used in your store - Zen Cart core defines no fixed list of what each number means, that's entirely up to your own pricing setup.</td>
+      <td>Optional plain number for <em>Configuration-&gt;My Store-&gt;Wholesale Pricing</em> (only meaningful if that setting isn't <em>false</em>); matches the same field on your admin's <em>Customers</em> edit screen. Enter 0 (or leave the column blank/missing) for none, or a number matching the wholesale settings already used in your store - Zen Cart core defines no fixed list of what each number means; that's entirely up to your own pricing setup.</td>
     </tr>
   </table>
 
   <p><strong>Everything else - address, gender, date of birth, company, coupon, newsletter, etc. - is never part of this file.</strong> Address and the rest are entered by the customer themselves, via your storefront's own account pages once they've activated and logged in; coupons aren't currently collected at entry at all. This keeps this file focused on the minimum needed to get someone started, and keeps mistakes in anything more sensitive (like address) from being attributable to the store. A tax/resale number, if you need to record one for a wholesale customer, can only be entered via the single-entry admin form, not this file.</p>
 
-  <p>If you don't know how to make a Comma-Separated Value (CSV) file, then use Microsoft Excel as normal to create a spreadsheet sheet. When you are ready to save, choose <span class="style1">file>save as</span> then at the bottom there will be a 'Save as type' option; choose 'CSV (comma delimited)' and then press Save. Answer yes to any warnings and there you have it... a csv!</p>
+  <p>If you don't know how to make a Comma-Separated Values (CSV) file, then use Microsoft Excel as normal to create a spreadsheet. When you are ready to save, choose <span class="style1">file>save as</span>, then at the bottom there will be a 'Save as type' option; choose 'CSV (comma delimited)' and then press Save. Answer yes to any warnings and there you have it... a CSV!</p>
   <p><a href="http://pro-webs.net/">PRO-Webs</a> v1-05 Modification of existing contribution by: <a href="http://www.zen-cart.com/index.php?main_page=product_contrib_info&amp;products_id=454">Rick Riehle</a></p>
 </body>
 </html>
