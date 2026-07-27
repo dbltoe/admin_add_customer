@@ -1,0 +1,6 @@
+first_name,last_name,email,telephone,customers_group_pricing,wholesale_level
+Jack,Smith,jack@home.com,123-456-7890,0,0
+Fred,Jones,fred@home.com,,2,0
+Wendy,Wholesaler,wendy@home.com,123-456-7890,0,3
+Ben,Duval,ben@home.com,,0,0
+Jill,Davis,jill@home.com,123-456-7890,0,0
