@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: add_customers.php 2026-07-26 05:30:22Z dbltoe $
+ * @version $Id: add_customers.php 2026-08-02 09:18:20Z dbltoe $
  */
 require 'includes/application_top.php';
 
@@ -170,8 +170,15 @@ if ($action !== false) {
    the admin regardless of selector scope - no need for extra scoping here. Matching core's
    own two-class selector (rather than just .formAreaTitle) keeps the same specificity, so
    this reliably overrides rather than risking a specificity tie.
+
+   font-size here also replaces core's own font-size: 12px (set on .formAreaTitle) with rem
+   instead, so it scales with the user's own browser/OS text-size or zoom preference instead
+   of staying fixed regardless of it - more noticeable on mobile/tablet than desktop. 1.2rem
+   matches the size core's own stylesheet.css already uses for .control-label elsewhere in
+   this admin theme, and reads noticeably easier than the original 12px without crowding
+   the page.
 */
-.row.formAreaTitle { margin-top: 1.5em; }
+.row.formAreaTitle { margin-top: 1.5em; margin-bottom: 0.5em; font-size: 1.2rem; }
 
 /* -----
    Color-contrast fixes (WCAG AA/AAA), per a Siteimprove scan of this page. All three classes
@@ -183,8 +190,12 @@ if ($action !== false) {
      - .btn-danger was white-on-#D0534F. #AA2420 clears AA/AAA with white text.
    Hover/focus states simply reverse background/text on the same two colors, so the contrast
    ratio is identical in both states.
+
+   .help-block's font-size is added here too, matching .row.formAreaTitle above: core's own
+   stylesheet.css already sets .control-label to 1.2rem, so this brings the field help text
+   up to read at the same size as the labels it belongs to.
 */
-.help-block { color: #525252; }
+.help-block { color: #525252; font-size: 1.2rem; }
 .btn-primary { background-color: #145b09; border-color: #145b09; color: #FFFFFF; }
 .btn-primary:hover, .btn-primary:focus { background-color: #FFFFFF; border-color: #145b09; color: #145b09; }
 .btn-danger { background-color: #AA2420; border-color: #AA2420; color: #FFFFFF; }
@@ -207,6 +218,35 @@ if ($action !== false) {
    larger, and inline-flex centers the (sometimes short) content within that floor.
 */
 .btn { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+/* -----
+   Print Sign-Up Form and Print Sign-Up Form (with Wholesale option) share a row, each in
+   its own dedicated column class rather than the shared col-md-6 (which every other
+   two-up field on this page still uses). Bootstrap's .btn keeps its default
+   white-space: nowrap here - a single unbroken line reads better than a wrapped one - so
+   the two columns are unevenly split (35%/65%) to give the longer wholesale label enough
+   room to fit on one line without overflowing its box, confirmed against a live
+   screenshot at 1600px wide.
+*/
+@media (min-width: 992px) {
+    .col-print-standard { width: 35%; }
+    .col-print-wholesale { width: 65%; }
+}
+
+/* -----
+   The page's own main left/right split (Email Header Image/Bulk Upload/Resend/Delete
+   Unclaimed Signups on the left, Single Customer Entry on the right) used Bootstrap's
+   plain col-md-4/col-md-8 (33.33%/66.67%), same as .col-md-6 elsewhere on this page -
+   editing those directly would affect every other col-md-4/col-md-8 element in the whole
+   admin, not just this page. Dedicated classes instead, at 40%/60%: the right-hand
+   single-entry fields don't need two-thirds of the page width, and giving some of that
+   space back to the left column gives its own fields (particularly the CSV file field)
+   more comfortable room.
+*/
+@media (min-width: 992px) {
+    .col-main-left { width: 40%; }
+    .col-main-right { width: 60%; }
+}
 </style>
 </head>
 
@@ -237,7 +277,7 @@ $wholesaleEnabled = $acfa->wholesaleEnabled();
 ?>
     <div class="container-fluid" role="main">
         <h1><?php echo HEADING_TITLE; ?></h1>
-        <div class="col-md-4">
+        <div class="col-md-4 col-main-left">
 <?php
 // -----
 // Email-header-image upload form rendering. Placed above Bulk Upload deliberately - the
@@ -283,18 +323,20 @@ if ($action == 'add_multiple') {
                        zen_hide_session_id() .
                        zen_draw_hidden_field('action', 'add_multiple'); ?>
             <h2 class="row formAreaTitle"><?php echo CUSTOMERS_BULK_UPLOAD; ?></h2>
-            <div class="pull-right noprint">
-                <a href="<?php echo HTTP_SERVER . DIR_WS_CATALOG; ?>add_customers_formatting_csv.html" rel="noopener" target="_blank" class="btn btn-sm btn-default btn-help" role="button" title="<?php echo TEXT_HELP_CSV_FORMAT; ?>" aria-label="<?php echo TEXT_HELP_CSV_FORMAT; ?>">
-                    <i class="fa fa-question fa-lg" aria-hidden="true"></i>
-                </a>
-            </div>
             <div class="formArea">
                 <div class="form-group">
                     <?php echo zen_draw_label(CUSTOMERS_FILE_IMPORT, 'bulk_upload', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9 col-md-6"><?php echo zen_draw_file_field('bulk_upload', true, 'class="form-control" id="bulk_upload"'); ?></div>
+                    <div class="col-sm-9"><?php echo zen_draw_file_field('bulk_upload', true, 'class="form-control" id="bulk_upload"'); ?></div>
                 </div>
-                <div class="row text-right">
-                    <button name="add_customers_in_bulk" type="submit" class="btn btn-primary"><?php echo IMAGE_UPLOAD; ?></button>
+                <div class="row">
+                    <div class="pull-left noprint">
+                        <a href="<?php echo HTTP_SERVER . DIR_WS_CATALOG; ?>add_customers_formatting_csv.html" rel="noopener" target="_blank" class="btn btn-sm btn-default btn-help" role="button" title="<?php echo TEXT_HELP_CSV_FORMAT; ?>" aria-label="<?php echo TEXT_HELP_CSV_FORMAT; ?>">
+                            <i class="fa fa-question fa-lg" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="pull-right">
+                        <button name="add_customers_in_bulk" type="submit" class="btn btn-primary"><?php echo IMAGE_UPLOAD; ?></button>
+                    </div>
                 </div>
             </div>
             <?php echo '</form>'; ?>
@@ -307,12 +349,20 @@ if ($printFormMissingFile !== '') {
 }
 ?>
                 <div class="row">
-                    <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=download_csv_template'); ?>" class="btn btn-sm btn-default"><?php echo DOWNLOAD_CSV_TEMPLATE; ?></a>
-                    <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=print_form'); ?>" target="_blank" class="btn btn-sm btn-default"><?php echo PRINT_SIGNUP_FORM; ?></a>
+                    <div class="col-md-6">
+                        <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=download_csv_template'); ?>" class="btn btn-sm btn-default"><?php echo DOWNLOAD_CSV_TEMPLATE; ?></a>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-6 col-print-standard" style="margin-bottom:10px">
+                        <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=print_form'); ?>" target="_blank" class="btn btn-sm btn-default"><?php echo PRINT_SIGNUP_FORM; ?></a>
+                    </div>
 <?php
 if ($wholesaleEnabled) {
 ?>
-                    <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=print_form&wholesale=1'); ?>" target="_blank" class="btn btn-sm btn-default"><?php echo PRINT_SIGNUP_FORM_WHOLESALE; ?></a>
+                    <div class="col-md-6 col-print-wholesale">
+                        <a href="<?php echo zen_href_link(FILENAME_ADD_CUSTOMERS, 'action=print_form&wholesale=1'); ?>" target="_blank" class="btn btn-sm btn-default"><?php echo PRINT_SIGNUP_FORM_WHOLESALE; ?></a>
+                    </div>
 <?php
 }
 ?>
@@ -379,7 +429,7 @@ if ($action == 'delete_abandoned') {
             <?php echo '</form>'; ?>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-8 col-main-right">
 <?php
 // -----
 // Add single-customer form rendering.
