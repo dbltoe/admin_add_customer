@@ -5,10 +5,10 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: manifest.php 2026-07-26 05:30:22Z dbltoe $
+ * @version $Id: manifest.php 2026-08-02 07:05:49Z dbltoe $
  */
 return [
-    'pluginVersion' => 'v1.0.0',
+    'pluginVersion' => 'v1.1.0',
     'pluginName' => 'Admin Add Customer',
     'pluginDescription' => 'Lets a store admin capture minimal customer details (name and email; phone is optional) one-by-one or via CSV bulk upload - e.g. at a public event - optionally assigning a pricing group and/or a wholesale level. Each new customer is emailed an activation link; their account stays pending until they click it and complete their own registration, including their address.',
     'pluginAuthor' => 'dbltoe based on the add_customers_from_admin mod by Vinos de Frutas Tropicales (lat9)',

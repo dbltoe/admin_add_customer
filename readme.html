@@ -77,7 +77,7 @@ code {
 <body>
 <a name="top" id="top"></a>
 <h1>Admin Add Customer for Zen Cart&reg; v2.0.0 - v3.0.0</h1>
-<h3>Version 1.0.0</h3>
+<h3>Version 1.1.0</h3>
 <p>This software is provided for your use under the GNU General Public License.</p>
 <p>This mod is based on the excellent foundation created by lat9 in the mod, <em>add_customers_from_admin</em>, which was unfortunately rendered inoperable by changes in both Zen Cart 2.0.0 and 2.2.0. This mod expands on and updates that mod as a complete new zc_plugin compatible with Zen Cart versions 2.0.0 through 3.0.0 and PHP versions 8.0 through 8.5.</p>
 
@@ -157,9 +157,9 @@ code {
 <p>If a customer's activation link expires (24 hours) or is lost, use the <em>Resend the Activation E-Mail</em> section of this tool to send a new one.</p>
 
 <h2>Installation</h2>
-<p>This plugin is packaged as a Zen Cart <a href="https://docs.zen-cart.com/dev/plugins/encapsulated_plugins/" target="_blank">encapsulated plugin</a>: it installs entirely inside <code>zc_plugins/</code> and does not require copying or editing any files inside <code>YOUR_ADMIN</code>. As always, <strong>back up</strong> your cart's database and files before making any changes.</p>
+<p>This plugin is packaged as a Zen Cart <a href="https://docs.zen-cart.com/dev/plugins/encapsulated_plugins/" target="_blank">encapsulated plugin</a>. It installs into your store's <strong>root</strong> - the folder that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and (since every store already has other encapsulated plugins) a <code>zc_plugins/</code> folder of its own. No files are copied into or edited inside <code>YOUR_ADMIN</code> itself. As always, <strong>back up</strong> your cart's database and files before making any changes.</p>
 <ol>
-  <li>This repository already contains the correct <code>zc_plugins/AdminAddUser/v1.0.0/</code> layout. Copy that <code>zc_plugins</code> folder (merging it) into the <code>zc_plugins/</code> directory of your Zen Cart installation.</li>
+  <li>This repository's own root contains a <code>zc_plugins/</code> folder, with this plugin's files inside it at <code>zc_plugins/AdminAddUser/v1.1.0/</code>. Upload/copy that entire <code>zc_plugins/</code> folder into your store's root, merging it into the <code>zc_plugins/</code> folder that's already there. When you're done, your store's <code>zc_plugins/</code> directory should contain an <code>AdminAddUser</code> folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.</li>
   <li>In your admin, go to <em>Tools-&gt;Install Plugins</em> (the Plugin Manager) and install "Admin Add Customer".</li>
   <li>Once installed, the tool is available via <em>Customers-&gt;Add Customer(s)</em>.</li>
 </ol>
@@ -183,6 +183,10 @@ code {
 <h2>Version History:</h2>
 <p>This plugin is based on the Add Customers from Admin add-on developed last for version 1.5.7 of Zen Cart&reg;. Core changes in Zen Cart&reg versions 2.0.0 and 2.2.0 unfortunately rendered the older version incompatible. The new mod brings back the option to add a customer from within the Admin and much more.</p>
 <ul>
+    <li>v1.1.0:<ul>
+        <li>CHANGE: Corrected the Installation section below - it previously undersold what actually gets copied where. Clarified what a store's "root" folder is (the one that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and an existing <code>zc_plugins/</code> folder) and that the entire provided <code>zc_plugins/</code> folder - not just its contents - is what gets merged into it.</li>
+        <li>BUGFIX: The welcome email's optional header-image URL had this plugin's version folder name hardcoded (<code>zc_plugins/AdminAddUser/v1.0.0/...</code>), which would have quietly produced a broken image link the moment the version folder was renamed for this very release. It's now derived from the actual on-disk folder names instead, so it can't go stale on future version bumps.</li>
+    </ul></li>
     <li>v1.0.0:<ul>
         <li>CHANGE: Supported Zen Cart versions are now v2.0.0 through the current v3.0.0-track <code>master</code> (dropping v1.5.x support; there is no separate v2.3.0 release to target).</li>
         <li>CHANGE: Repackaged as an <a href="https://docs.zen-cart.com/dev/plugins/encapsulated_plugins/" target="_blank">encapsulated plugin</a> under <code>zc_plugins/AdminAddUser/</code>, installed/uninstalled via the admin's Plugin Manager. No files are copied into or overwrite anything in <code>YOUR_ADMIN</code>.</li>

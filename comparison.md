@@ -1,8 +1,8 @@
 ## Feature comparison
 
-| | zenexpert/add-customers 4.0.0 | dbltoe/admin_add_customer v1.0.0 |
+| | zenexpert/add-customers 4.0.0 | dbltoe/admin_add_customer v1.1.0 |
 |---|---|---|
-| Plugin dir | `zc_plugins/AddCustomers/4.0.0` | `zc_plugins/AdminAddUser/v1.0.0` |
+| Plugin dir | `zc_plugins/AddCustomers/4.0.0` | `zc_plugins/AdminAddUser/v1.1.0` |
 | Authors | lat9, ZenExpert | dbltoe (based on lat9's mod) |
 | ZC compatibility | v2.0.0, v2.0.1, v2.1.0 | v2.0.0 → v3.0.0-track `master` |
 | Fields collected | Full profile: gender, DOB, company, street, suburb, city, state/zone, postcode, country, phone, fax, email format, newsletter, referral code | Minimal: first/last name, email, phone (optional), tax number |

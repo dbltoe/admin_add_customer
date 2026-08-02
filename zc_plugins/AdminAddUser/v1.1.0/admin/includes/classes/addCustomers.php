@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: addCustomers.php 2026-07-26 05:30:22Z dbltoe $
+ * @version $Id: addCustomers.php 2026-08-02 07:05:49Z dbltoe $
  */
 class addCustomers extends base
 {
@@ -274,7 +274,12 @@ class addCustomers extends base
             $emailDir = $this->getEmailImageDir();
             foreach (self::HEADER_IMAGE_EXTENSIONS as $extension) {
                 if (is_file($emailDir . 'header.' . $extension)) {
-                    $url = HTTP_SERVER . DIR_WS_CATALOG . 'zc_plugins/AdminAddUser/v1.0.0/email/header.' . $extension;
+                    // -----
+                    // Derived from the actual on-disk folder names (rather than hardcoded)
+                    // so this doesn't need a manual update on every version bump.
+                    //
+                    $pluginPath = basename(dirname(__DIR__, 4)) . '/' . basename(dirname(__DIR__, 3));
+                    $url = HTTP_SERVER . DIR_WS_CATALOG . 'zc_plugins/' . $pluginPath . '/email/header.' . $extension;
                     break;
                 }
             }
