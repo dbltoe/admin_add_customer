@@ -1,4 +1,4 @@
-# Zen Cart: Admin Add User v1.1.0
+# Zen Cart: Admin Add Customer v1.1.0
 
 Lets a store admin capture minimal customer details (name and email; phone is optional) one-by-
 one or via CSV bulk upload, optionally assigning a pricing group and/or a wholesale level. Each

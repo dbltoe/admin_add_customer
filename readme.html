@@ -186,6 +186,7 @@ code {
     <li>v1.1.0:<ul>
         <li>CHANGE: Corrected the Installation section below - it previously undersold what actually gets copied where. Clarified what a store's "root" folder is (the one that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and an existing <code>zc_plugins/</code> folder) and that the entire provided <code>zc_plugins/</code> folder - not just its contents - is what gets merged into it.</li>
         <li>BUGFIX: The welcome email's optional header-image URL had this plugin's version folder name hardcoded (<code>zc_plugins/AdminAddUser/v1.0.0/...</code>), which would have quietly produced a broken image link the moment the version folder was renamed for this very release. It's now derived from the actual on-disk folder names instead, so it can't go stale on future version bumps.</li>
+        <li>CHANGE: <code>manifest.php</code>'s Plugin Manager info box now shows <strong>Read Me</strong> and <strong>GitHub</strong> buttons, matching the pattern used for Social Contact Footer. The listed Author changed from a reference to the original <em>add_customers_from_admin</em> mod to "My Zen Cart Host (dbltoe)"; credit to lat9 for that original foundation remains in this readme's introduction above.</li>
     </ul></li>
     <li>v1.0.0:<ul>
         <li>CHANGE: Supported Zen Cart versions are now v2.0.0 through the current v3.0.0-track <code>master</code> (dropping v1.5.x support; there is no separate v2.3.0 release to target).</li>
