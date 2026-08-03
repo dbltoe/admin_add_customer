@@ -77,7 +77,7 @@ code {
 <body>
 <a name="top" id="top"></a>
 <h1>Admin Add Customer for Zen Cart&reg; v2.0.0 - v3.0.0</h1>
-<h3>Version 1.1.0</h3>
+<h3>Version 1.1.1</h3>
 <p>This software is provided for your use under the GNU General Public License.</p>
 <p>This mod is based on the excellent foundation created by lat9 in the mod, <em>add_customers_from_admin</em>, which was unfortunately rendered inoperable by changes in both Zen Cart 2.0.0 and 2.2.0. This mod expands on and updates that mod as a complete new zc_plugin compatible with Zen Cart versions 2.0.0 through 3.0.0 and PHP versions 8.0 through 8.5.</p>
 
@@ -159,12 +159,12 @@ code {
 <h2>Installation</h2>
 <p>This plugin is packaged as a Zen Cart <a href="https://docs.zen-cart.com/dev/plugins/encapsulated/" target="_blank">encapsulated plugin</a>. It installs into your store's <strong>root</strong> - the folder that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and (since every store already has other encapsulated plugins) a <code>zc_plugins/</code> folder of its own. No files are copied into or edited inside <code>YOUR_ADMIN</code> itself. As always, <strong>back up</strong> your cart's database and files before making any changes.</p>
 <ol>
-  <li>This repository's own root contains a <code>zc_plugins/</code> folder, with this plugin's files inside it at <code>zc_plugins/AdminAddUser/v1.1.0/</code>. Upload/copy that entire <code>zc_plugins/</code> folder into your store's root, merging it into the <code>zc_plugins/</code> folder that's already there. When you're done, your store's <code>zc_plugins/</code> directory should contain an <code>AdminAddUser</code> folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.</li>
+  <li>This repository's own root contains a <code>zc_plugins/</code> folder, with this plugin's files inside it at <code>zc_plugins/AdminAddUser/v1.1.1/</code>. Upload/copy that entire <code>zc_plugins/</code> folder into your store's root, merging it into the <code>zc_plugins/</code> folder that's already there. When you're done, your store's <code>zc_plugins/</code> directory should contain an <code>AdminAddUser</code> folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.</li>
   <li>In your admin, go to <em>Tools-&gt;Install Plugins</em> (the Plugin Manager) and install "Admin Add Customer".</li>
   <li>Once installed, the tool is available via <em>Customers-&gt;Add Customer(s)</em>.</li>
 </ol>
 <p>No upgrade is needed with this initial installation.</p>
-<p>This readme, its screenshots, and the CSV formatting guide are also included inside <code>zc_plugins/AdminAddUser/v1.1.0/</code>, so once installed they're still reachable without downloading the repository again - via the <strong>Read Me</strong> button shown alongside "Admin Add Customer" in <em>Tools-&gt;Install Plugins</em>.</p>
+<p>This readme, its screenshots, and the CSV formatting guide are also included inside <code>zc_plugins/AdminAddUser/v1.1.1/</code>, so once installed they're still reachable without downloading the repository again - via the <strong>Read Me</strong> button shown alongside "Admin Add Customer" in <em>Tools-&gt;Install Plugins</em>.</p>
 
 <h3>Other Files</h3>
 <p>This plugin also includes the following files that are not part of the installed plugin itself:</p>
@@ -184,6 +184,10 @@ code {
 <h2>Version History:</h2>
 <p>This plugin is based on the Add Customers from Admin add-on developed last for version 1.5.7 of Zen Cart&reg;. Core changes in Zen Cart&reg versions 2.0.0 and 2.2.0 unfortunately rendered the older version incompatible. The new mod brings back the option to add a customer from within the Admin and much more.</p>
 <ul>
+    <li>v1.1.1:<ul>
+        <li>BUGFIX: <code>wholesaleEnabled()</code> called core's <code>zen_config()</code> helper, which is only available since ZC v3.0.0 - on any earlier version this fatals with "Call to undefined function," confirmed by a real user report on v2.1.0/PHP 8.2.1. Replaced with a <code>defined()</code>/<code>constant()</code> check - the same fallback <code>zen_config()</code> itself uses internally - so this now behaves identically across the whole v2.0.0-v3.0.0 range this plugin claims to support, not just the versions where <code>zen_config()</code> happens to exist.</li>
+        <li>BUGFIX: A plugin's own root-level <code>filenames.php</code> is only auto-loaded by Zen Cart core starting at v2.2.0 - confirmed directly against core's own bootstrap files at the v2.0.0, v2.1.0, v2.2.0, v2.2.1, and v2.2.2 tags. On v2.0.0/v2.1.0, <code>FILENAME_ADD_CUSTOMERS</code>, <code>BOX_CUSTOMERS_ADD_CUSTOMERS</code>, <code>TABLE_ADMIN_ADD_USER_TOKENS</code>, and (on the storefront) <code>FILENAME_ADMIN_ADD_USER_ACTIVATE</code> were never getting defined, breaking the admin menu after install and the activation link in every welcome email - reported by a real user on v2.1.0 as the plugin "not installing." <code>admin/includes/extra_datafiles/</code> and <code>catalog/includes/extra_datafiles/</code>, unlike root-level <code>filenames.php</code>, have been auto-loaded per-plugin since v2.0.0, so a copy of <code>filenames.php</code> now lives in each (as a one-line file requiring the original), closing the gap on every version this plugin supports.</li>
+    </ul></li>
     <li>v1.1.0:<ul>
         <li>CHANGE: Corrected the Installation section below - it previously undersold what actually gets copied where. Clarified what a store's "root" folder is (the one that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and an existing <code>zc_plugins/</code> folder) and that the entire provided <code>zc_plugins/</code> folder - not just its contents - is what gets merged into it.</li>
         <li>BUGFIX: The welcome email's optional header-image URL had this plugin's version folder name hardcoded (<code>zc_plugins/AdminAddUser/v1.0.0/...</code>), which would have quietly produced a broken image link the moment the version folder was renamed for this very release. It's now derived from the actual on-disk folder names instead, so it can't go stale on future version bumps.</li>

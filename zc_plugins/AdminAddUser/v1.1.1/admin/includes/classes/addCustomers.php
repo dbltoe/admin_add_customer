@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: addCustomers.php 2026-08-02 07:05:49Z dbltoe $
+ * @version $Id: addCustomers.php 2026-08-03 17:27:49Z dbltoe $
  */
 class addCustomers extends base
 {
@@ -53,9 +53,16 @@ class addCustomers extends base
     // Whether the store has Wholesale Pricing enabled at all (core setting, since v2.0.0);
     // used to decide whether to show the Wholesale Level field.
     //
+    // Deliberately not zen_config() - that helper is @since ZC v3.0.0 only, so calling it
+    // fatals with "Call to undefined function" on any earlier version, confirmed by a real
+    // user report on v2.1.0/PHP 8.2.1. defined()/constant() is the same fallback zen_config()
+    // itself uses internally when its own backing repository isn't available, so this behaves
+    // identically on every version this plugin claims to support, not just the ones where
+    // zen_config() happens to exist.
+    //
     public function wholesaleEnabled()
     {
-        return zen_config('WHOLESALE_PRICING_CONFIG') !== 'false';
+        return (defined('WHOLESALE_PRICING_CONFIG') ? constant('WHOLESALE_PRICING_CONFIG') : 'false') !== 'false';
     }
 
     // -----
