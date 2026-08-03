@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: addCustomers.php 2026-08-03 17:27:49Z dbltoe $
+ * @version $Id: addCustomers.php 2026-08-03 17:51:43Z dbltoe $
  */
 class addCustomers extends base
 {
@@ -747,7 +747,15 @@ class addCustomers extends base
         }
 
         if (NEW_SIGNUP_GIFT_VOUCHER_AMOUNT > 0) {
-            $gv_coupon_code = create_coupon_code();
+            // -----
+            // Not zen_create_coupon_code() (core's own deprecated-since-v2.0.0 wrapper) or a
+            // bare create_coupon_code() (never existed under that name at all - this call would
+            // have fataled with "Call to undefined function" on every signup, on every version,
+            // the moment a store had this core setting turned on). Coupon::generateRandomCouponCode()
+            // is core's own current replacement, @since exactly the v2.0.0 floor this plugin
+            // targets.
+            //
+            $gv_coupon_code = Coupon::generateRandomCouponCode();
             $db->Execute(
                 "INSERT INTO " . TABLE_COUPONS . "
                     (coupon_code, coupon_type, coupon_amount, date_created)
