@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: add_customers.php 2026-08-02 09:18:20Z dbltoe $
+ * @version $Id: add_customers.php 2026-08-02 21:39:23Z dbltoe $
  */
 require 'includes/application_top.php';
 
@@ -194,8 +194,21 @@ if ($action !== false) {
    .help-block's font-size is added here too, matching .row.formAreaTitle above: core's own
    stylesheet.css already sets .control-label to 1.2rem, so this brings the field help text
    up to read at the same size as the labels it belongs to.
+
+   .control-label itself is included below for the same 1.2rem, even though it's already set
+   in core's own stylesheet.css - confirmed via live inspection that it wasn't reliably taking
+   effect on this specific page. Scoped here the same way as everything else in this block,
+   rather than chasing down why core's own rule wasn't reaching this page.
+
+   input, select, textarea matches core's own generic (element-selector, not class) rule of
+   the same name, set at a fixed 11px in the shared stylesheet - most visible in the "Please
+   Choose" placeholder text of the Resend the Welcome E-Mail customer dropdown. Same 1.2rem
+   as everything else above; matching core's own selector exactly (rather than a class) keeps
+   the same specificity, so this reliably overrides rather than risking a specificity tie.
 */
 .help-block { color: #525252; font-size: 1.2rem; }
+.control-label { font-size: 1.2rem; }
+input, select, textarea { font-size: 1.2rem; }
 .btn-primary { background-color: #145b09; border-color: #145b09; color: #FFFFFF; }
 .btn-primary:hover, .btn-primary:focus { background-color: #FFFFFF; border-color: #145b09; color: #145b09; }
 .btn-danger { background-color: #AA2420; border-color: #AA2420; color: #FFFFFF; }
@@ -394,8 +407,12 @@ if ($action == 'resend_email') {
                         // silently dropped from the rendered output (confirmed via the live
                         // page source), leaving the label's for="reset_pw" with nothing to
                         // match. Writing the checkbox directly sidesteps needing to know what
-                        // that argument actually does. ?>
-                        <input type="checkbox" name="reset_pw" id="reset_pw" value="1" class="form-control"<?php echo (isset($_POST['reset_pw'])) ? ' checked' : ''; ?>>
+                        // that argument actually does.
+                        //
+                        // No class here - form-control is meant for block-level, full-width
+                        // text inputs/selects (~34px tall), and applying it to a checkbox made
+                        // it render oversized, like a button rather than a checkbox. ?>
+                        <input type="checkbox" name="reset_pw" id="reset_pw" value="1"<?php echo (isset($_POST['reset_pw'])) ? ' checked' : ''; ?>>
 
                     </div>
                 </div>
