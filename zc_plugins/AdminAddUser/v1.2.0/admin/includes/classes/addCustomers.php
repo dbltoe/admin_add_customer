@@ -5,8 +5,22 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: addCustomers.php 2026-08-03 17:51:43Z dbltoe $
+ * @version $Id: addCustomers.php 2026-08-26 15:49:10Z dbltoe $
  */
+// -----
+// This file is only ever loaded by admin/add_customers.php, after application_top.php has run.
+// Zen Cart's shipped zc_plugins/.htaccess already denies direct HTTP requests to .php files,
+// but that's Apache-only and depends on AllowOverride being permitted - it does nothing on
+// nginx/LiteSpeed or a locked-down shared host. This is the same guard core uses on its own
+// included admin files (and that lat9's POSM uses on its plugin admin classes), so a direct
+// request can't execute this file even where the .htaccess isn't honored. NOTE: the guard
+// belongs on *included* files only - a top-level admin page like add_customers.php must not
+// have it, since IS_ADMIN_FLAG doesn't exist until the application_top.php it requires has run.
+//
+if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== true) {
+    die('Illegal Access');
+}
+
 class addCustomers extends base
 {
     // -----
@@ -135,7 +149,21 @@ class addCustomers extends base
             if (empty($extension) || !in_array(strtoupper($extension), $allowed_extensions)) {
                 $errors[] = sprintf(ERROR_BAD_FILE_EXTENSION, $extension) . implode(', ', $allowed_extensions);
             } else {
-                $filepath = DIR_FS_BACKUP . $files['name'];
+                // -----
+                // Deliberately not DIR_FS_BACKUP . $files['name'] - that's the client-supplied
+                // original filename, entirely attacker-controlled, used unsanitized in a
+                // filesystem path. The extension allowlist above limits it to .txt/.csv, but a
+                // crafted name (e.g. containing ../) could still move_uploaded_file() outside
+                // DIR_FS_BACKUP or overwrite an unrelated .txt/.csv file elsewhere. This file is
+                // temporary regardless - parsed immediately below and unlink()'d at the end - so
+                // there's no reason to trust the original name for its on-disk path at all, the
+                // same reasoning uploadEmailHeaderImage() already applies to its own upload.
+                //
+                $filepath = tempnam(DIR_FS_BACKUP, 'bulk_upload_');
+                if ($filepath === false) {
+                    $errors[] = ERROR_CANT_MOVE_FILE;
+                    return $errors;
+                }
 
                 if (move_uploaded_file($files['tmp_name'], $filepath) === false) {
                     $errors[] = ERROR_CANT_MOVE_FILE;

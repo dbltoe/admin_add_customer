@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: add_customers.php 2026-08-02 21:39:23Z dbltoe $
+ * @version $Id: add_customers.php 2026-08-26 15:49:10Z dbltoe $
  */
 require 'includes/application_top.php';
 
@@ -269,17 +269,27 @@ require DIR_WS_INCLUDES . 'header.php';
 
 $infoDivContents = '';
 if (count($errors) > 0) {
-    $infoDivContents = '<div class="errorDiv" role="alert"><p class="errorBold">' . ERROR_CUSTOMER_ERROR_1 . (($action == 'insert_multiple' && !empty($_FILES['bulk_upload']['name'])) ? (' (' . $_FILES['bulk_upload']['name'] . ')') : '') . ':' . '</p><ul>';
+    // -----
+    // Every value interpolated into this HTML is escaped at this output boundary, not wherever
+    // it originated - some error messages built in addCustomers.php's validateCustomer()/
+    // checkFileUpload() carry a submitted value verbatim (e.g. an invalid email address, or a
+    // first/last name that only went through zen_db_prepare_input(), not the <>-stripping
+    // zen_sanitize_string() insertCustomer() applies at actual insert time), and the uploaded
+    // file's own name below is entirely attacker/admin-controlled. Escaping here rather than at
+    // each origin covers every current and future message the same way, regardless of what it
+    // happens to contain.
+    //
+    $infoDivContents = '<div class="errorDiv" role="alert"><p class="errorBold">' . ERROR_CUSTOMER_ERROR_1 . (($action === 'add_multiple' && !empty($_FILES['bulk_upload']['name'])) ? (' (' . htmlspecialchars($_FILES['bulk_upload']['name'], ENT_QUOTES, CHARSET) . ')') : '') . ':' . '</p><ul>';
 
     foreach ($errors as $line_no => $error) {
         if (is_array($error)) {
             $infoDivContents .= '<div class="error">' . sprintf(ERROR_ON_LINE, $line_no) . '</div><ul>';
             foreach ($error as $err) {
-                $infoDivContents .= '<li class="error">' . $err . '</li>';
+                $infoDivContents .= '<li class="error">' . htmlspecialchars($err, ENT_QUOTES, CHARSET) . '</li>';
             }
             $infoDivContents .= '</ul>';
         } else {
-            $infoDivContents .= '<li class="error">' . $error . '</li>';
+            $infoDivContents .= '<li class="error">' . htmlspecialchars($error, ENT_QUOTES, CHARSET) . '</li>';
         }
     }
     $infoDivContents .= '</ul></div>';
