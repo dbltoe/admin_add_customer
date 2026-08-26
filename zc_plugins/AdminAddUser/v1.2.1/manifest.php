@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: manifest.php 2026-08-03 17:55:10Z dbltoe $
+ * @version $Id: manifest.php 2026-08-26 15:49:10Z dbltoe $
  */
 // -----
 // Read Me / GitHub buttons shown in the Plugin Manager's info box, matching the pattern
@@ -35,7 +35,7 @@ $aacLinks =
     . '</div>';
 
 return [
-    'pluginVersion' => 'v1.2.0',
+    'pluginVersion' => 'v1.2.1',
     'pluginName' => 'Admin Add Customer',
     'pluginDescription' => 'Lets a store admin capture minimal customer details (name and email; phone is optional) one-by-one or via CSV bulk upload - e.g. at a public event - optionally assigning a pricing group and/or a wholesale level. Each new customer is emailed an activation link; their account stays pending until they click it and complete their own registration, including their address.' . $aacLinks,
     'pluginAuthor' => 'My Zen Cart Host (dbltoe)',
