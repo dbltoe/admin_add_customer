@@ -84,7 +84,7 @@ if ($action !== false) {
             list($cInfo, $errors) = $acfa->validateCustomer($_POST);
             if (count($errors) === 0) {
                 $customerName = $acfa->insertCustomer($_POST);
-                $messageStack->add_session(sprintf(MESSAGE_CUSTOMER_OK, $customerName), 'success');
+                $messageStack->add_session(sprintf(MESSAGE_CUSTOMER_OK, htmlspecialchars($customerName, ENT_QUOTES, CHARSET)), 'success');
                 zen_redirect(zen_href_link(FILENAME_ADD_CUSTOMERS));
             }
             break;
@@ -130,7 +130,26 @@ if ($action !== false) {
                     $errors[] = ERROR_NO_CUSTOMER_SELECTED;
                 } else {
                     $acfa->regenerateAndResendToken((int)$_POST['resend_id'], isset($_POST['reset_pw']) && $_POST['reset_pw'] === '1');
-                    $messageStack->add_session(CUSTOMER_EMAIL_RESENT . ' ' . $custInfo->fields['customers_firstname'] . ' ' . $custInfo->fields['customers_lastname'] . ' (' . $custInfo->fields['customers_email_address'] . ')', 'success');
+                    // -----
+                    // Escaped rather than trusted. insertCustomer() runs names through core's
+                    // zen_sanitize_string(), but this dropdown is fed by createCustomerDropdown(),
+                    // which selects EVERY customer with customers_authorization != AUTH_OK -- not
+                    // only the ones this plugin created. A customer registered through the
+                    // storefront on an approval-required store, or edited in core's own admin,
+                    // reaches this line too, and nothing here can vouch for what is in their name.
+                    // messageStack output is echoed as raw HTML, so it is escaped at the point of
+                    // use instead of reasoned about.
+                    //
+                    $messageStack->add_session(
+                        CUSTOMER_EMAIL_RESENT . ' '
+                        . htmlspecialchars(
+                            $custInfo->fields['customers_firstname'] . ' ' . $custInfo->fields['customers_lastname']
+                            . ' (' . $custInfo->fields['customers_email_address'] . ')',
+                            ENT_QUOTES,
+                            CHARSET
+                        ),
+                        'success'
+                    );
                     zen_redirect(zen_href_link(FILENAME_ADD_CUSTOMERS));
                 }
             }
