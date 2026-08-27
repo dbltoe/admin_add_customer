@@ -1,1 +1,9 @@
 comparison.md
+
+# Maintainer tooling -- kept local, never shipped.
+# The release zip is built with `git archive`, which only takes tracked files,
+# so ignoring these keeps them out of the package as well as out of the repo.
+# They name PHP builds that will not exist on a store owner's machine and would
+# only raise questions in a support thread.
+tests/
+tools/

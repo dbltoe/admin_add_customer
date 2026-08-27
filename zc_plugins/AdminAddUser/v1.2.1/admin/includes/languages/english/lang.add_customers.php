@@ -148,11 +148,11 @@ $define = [
     // Optional header banner image for the welcome email's HTML version - see
     // addCustomers::uploadEmailHeaderImage() and email/README.txt.
     //
-    'EMAIL_HEADER_IMAGE_TITLE' => 'Welcome Email Header Image',
+    'EMAIL_HEADER_IMAGE_TITLE' => 'Welcome E-Mail Header Image',
     'HELPTEXT_EMAIL_HEADER_IMAGE' => 'Optional. Shown at the top of the welcome/activation email\'s HTML version, matching Zen Cart\'s own default email header size of 550 x 110 (not required or enforced - larger or smaller images are simply scaled to fit). Uploading a new image replaces any existing one.',
     'TEXT_CURRENT_HEADER_IMAGE' => 'Current image:',
     'ALT_CURRENT_HEADER_IMAGE' => 'Current welcome email header image',
-    'TEXT_EMAIL_HEADER_IMPORT' => 'Email Header to Import: ',
+    'TEXT_EMAIL_HEADER_IMPORT' => 'E-Mail Header to Import: ',
     'MESSAGE_EMAIL_HEADER_UPLOADED' => 'The email header image was uploaded successfully.',
     'ERROR_NO_HEADER_IMAGE_FILE' => 'Please choose an image file before pressing "Upload".',
     'ERROR_BAD_HEADER_IMAGE_EXTENSION' => 'The file extension (%s) must be one of: ',
@@ -203,7 +203,7 @@ $define = [
     'ERROR_NO_UPLOAD_FILE' => 'Please choose a "File to Import" before pressing "Upload"',
     'ERROR_FILE_UPLOAD' => 'Error (%s) uploading file',
     'ERROR_BAD_FILE_EXTENSION' => 'The file extension (%s) must be one of: ',
-    'ERROR_BAD_FILE_HEADER' => 'Either the header row in the input file is empty or it was not recognised.',
+    'ERROR_BAD_FILE_HEADER' => 'Either the header row in the input file is empty or it was not recognized.',
     'ERROR_NO_RECORDS' => 'No customer records were found in the imported file.',  /*v2.0.3a*/
     'ERROR_FIRST_NAME' => '"First Name" must be at least ' . ENTRY_FIRST_NAME_MIN_LENGTH . ' characters in length.',
     'ERROR_LAST_NAME' => '"Last Name" must be at least ' . ENTRY_LAST_NAME_MIN_LENGTH . ' characters in length.',

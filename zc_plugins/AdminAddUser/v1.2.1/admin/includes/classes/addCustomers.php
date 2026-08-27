@@ -324,7 +324,7 @@ class addCustomers extends base
     }
 
     // -----
-    // Handles an upload from the admin page's "Email Header to Import:" field. Any existing
+    // Handles an upload from the admin page's "E-Mail Header to Import:" field. Any existing
     // header.* files are removed first so exactly one is ever present at a time (otherwise an
     // old file in a different format could linger and still win, per
     // HEADER_IMAGE_EXTENSIONS's priority order, even after uploading a replacement). The saved

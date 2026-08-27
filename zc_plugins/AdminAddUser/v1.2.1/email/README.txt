@@ -2,7 +2,7 @@ This folder holds an optional header banner image for the welcome/activation ema
 plugin sends. It's entirely optional - if no file is here, the email is sent without one,
 exactly as before.
 
-The easiest way to set this is the "Email Header to Import:" field on the admin's Add
+The easiest way to set this is the "E-Mail Header to Import:" field on the admin's Add
 Customers page (below the Bulk Upload area) - it handles everything below automatically,
 including replacing whatever was here before.
 
