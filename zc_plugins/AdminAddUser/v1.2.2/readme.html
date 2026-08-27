@@ -77,7 +77,7 @@ code {
 <body>
 <a name="top" id="top"></a>
 <h1>Admin Add Customer for Zen Cart&reg; v2.0.0 - v3.0.0</h1>
-<h3>Version 1.2.1</h3>
+<h3>Version 1.2.2</h3>
 <p>This software is provided for your use under the GNU General Public License.</p>
 <p>This mod is based on the excellent foundation created by lat9 in the mod, <em>add_customers_from_admin</em>, which was unfortunately rendered inoperable by changes in both Zen Cart 2.0.0 and 2.2.0. This mod expands on and updates that mod as a complete new zc_plugin compatible with Zen Cart versions 2.0.0 through 3.0.0 and PHP versions 8.0 through 8.5.</p>
 
@@ -159,12 +159,12 @@ code {
 <h2>Installation</h2>
 <p>This plugin is packaged as a Zen Cart <a href="https://docs.zen-cart.com/dev/plugins/encapsulated/" target="_blank">encapsulated plugin</a>. It installs into your store's <strong>root</strong> - the folder that also contains <code>YOUR_ADMIN</code>, <code>includes/</code>, <code>email/</code>, <code>logs/</code>, and (since every store already has other encapsulated plugins) a <code>zc_plugins/</code> folder of its own. No files are copied into or edited inside <code>YOUR_ADMIN</code> itself. As always, <strong>back up</strong> your cart's database and files before making any changes.</p>
 <ol>
-  <li>This repository's own root contains a <code>zc_plugins/</code> folder, with this plugin's files inside it at <code>zc_plugins/AdminAddUser/v1.2.1/</code>. Upload/copy that entire <code>zc_plugins/</code> folder into your store's root, merging it into the <code>zc_plugins/</code> folder that's already there. When you're done, your store's <code>zc_plugins/</code> directory should contain an <code>AdminAddUser</code> folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.</li>
+  <li>This repository's own root contains a <code>zc_plugins/</code> folder, with this plugin's files inside it at <code>zc_plugins/AdminAddUser/v1.2.2/</code>. Upload/copy that entire <code>zc_plugins/</code> folder into your store's root, merging it into the <code>zc_plugins/</code> folder that's already there. When you're done, your store's <code>zc_plugins/</code> directory should contain an <code>AdminAddUser</code> folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.</li>
   <li>In your admin, go to <em>Tools-&gt;Install Plugins</em> (the Plugin Manager) and install "Admin Add Customer".</li>
   <li>Once installed, the tool is available via <em>Customers-&gt;Add Customer(s)</em>.</li>
 </ol>
 <p>No upgrade is needed with this initial installation.</p>
-<p>This readme, its screenshots, and the CSV formatting guide are also included inside <code>zc_plugins/AdminAddUser/v1.2.1/</code>, so once installed they're still reachable without downloading the repository again - via the <strong>Read Me</strong> button shown alongside "Admin Add Customer" in <em>Tools-&gt;Install Plugins</em>.</p>
+<p>This readme, its screenshots, and the CSV formatting guide are also included inside <code>zc_plugins/AdminAddUser/v1.2.2/</code>, so once installed they're still reachable without downloading the repository again - via the <strong>Read Me</strong> button shown alongside "Admin Add Customer" in <em>Tools-&gt;Install Plugins</em>.</p>
 
 <h3>Other Files</h3>
 <p>This plugin also includes the following files that are not part of the installed plugin itself:</p>
@@ -184,6 +184,13 @@ code {
 <h2>Version History:</h2>
 <p>This plugin is based on the Add Customers from Admin add-on developed last for version 1.5.7 of Zen Cart&reg;. Core changes in Zen Cart&reg versions 2.0.0 and 2.2.0 unfortunately rendered the older version incompatible. The new mod brings back the option to add a customer from within the Admin and much more.</p>
 <ul>
+    <li>v1.2.2:<ul>
+        <li>SECURITY: Customer names shown in the admin's own confirmation messages are now escaped where they're displayed. The names this plugin writes were already stripped of <code>&lt;</code> and <code>&gt;</code> on the way in, but the <em>Resend the Welcome E-Mail</em> message doesn't only show those - its drop-down lists every customer still awaiting activation, including ones who registered through the storefront on an approval-required store, or whose details were edited elsewhere in the admin. This plugin can't vouch for names it didn't write, so it no longer tries to: they're escaped at the point of display instead, which is correct whatever their origin. Reaching this needed an unusual combination (an approval-required store, a customer created outside this plugin with markup in their name, and an admin using Resend on them), so it is hardening rather than an open door.</li>
+        <li>CHANGE: <code>ERROR_BAD_FILE_HEADER</code> said "recognised"; it now reads "recognized", matching the American spelling used everywhere else.</li>
+        <li>CHANGE: The <em>Welcome E-Mail Header Image</em> section heading and its <em>E-Mail Header to Import:</em> field said "Email" where Zen Cart core writes "E-Mail" (core's own <code>ENTRY_EMAIL_ADDRESS</code> is "E-Mail Address:"). Both now match core, along with everything that quotes them - this readme, the CSV formatting guide, and the <code>email/README.txt</code>. The readme and CSV guide also mis-quoted core's <em>Minimum Values-&gt;E-Mail Address</em> setting, which is corrected.</li>
+        <li>BUGFIX: The docs said the printable sign-up sheets had to be supplied by the store owner - "you supply them yourself", "Add exactly these two files here before deploying" - but both PDFs have shipped with the plugin since v1.0.0. Anyone following that would have gone looking for files already in their download. Both <code>readme.html</code> and <code>pdf/README.txt</code> now say the sheets ship and work on install, and explain how to replace either with your own.</li>
+        <li>CHANGE: <code>manifest.php</code>'s <code>pluginId</code> is now declared as an integer rather than a quoted string, matching how Zen Cart's own bundled plugins declare theirs. Nothing behaved differently either way; the value (2445) is unchanged.</li>
+    </ul></li>
     <li>v1.2.1:<ul>
         <li>SECURITY: The admin page's error panel interpolated its messages into HTML without escaping them. Some of those messages carry a submitted value verbatim (an invalid email address, or a first/last name), and names only pass through <code>zen_db_prepare_input()</code> at validation time - the <code>&lt;&gt;</code>-stripping <code>zen_sanitize_string()</code> isn't applied until the actual insert, which never runs for a row that failed validation. Every value is now escaped at that output boundary, so it's covered regardless of what any current or future message happens to contain.</li>
         <li>SECURITY: The CSV bulk-upload wrote the uploaded file using the client-supplied original filename, unsanitized, as its on-disk path. The <code>.txt</code>/<code>.csv</code> extension check limited the exposure, but a crafted filename could still place the file outside the intended directory or overwrite an unrelated file. The upload now gets a generated temporary name instead - it's parsed and deleted immediately either way, so its original name was never needed.</li>
