@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: add_customers.php 2026-08-26 15:49:10Z dbltoe $
+ * @version $Id: add_customers.php 2026-09-10 16:32:28Z dbltoe $
  */
 require 'includes/application_top.php';
 
@@ -81,9 +81,17 @@ if ($action !== false) {
         // if found to be OK, subsequently written to the database.
         //
         case 'add_single':
-            list($cInfo, $errors) = $acfa->validateCustomer($_POST);
+            // -----
+            // Tagged so an observer on NOTIFY_ADMIN_ADD_CUSTOMER_VALIDATE can tell this
+            // apart from the CSV path without guessing at the shape of the array. Kept
+            // in a local rather than written into $_POST, which belongs to the request.
+            //
+            $postedCustomer = $_POST;
+            $postedCustomer['_aacp_source'] = 'form';
+
+            list($cInfo, $errors) = $acfa->validateCustomer($postedCustomer);
             if (count($errors) === 0) {
-                $customerName = $acfa->insertCustomer($_POST);
+                $customerName = $acfa->insertCustomer($postedCustomer);
                 $messageStack->add_session(sprintf(MESSAGE_CUSTOMER_OK, htmlspecialchars($customerName, ENT_QUOTES, CHARSET)), 'success');
                 zen_redirect(zen_href_link(FILENAME_ADD_CUSTOMERS));
             }
@@ -483,6 +491,59 @@ if ($action == 'delete_abandoned') {
 if ($action === 'add_single') {
     echo $infoDivContents;
 }
+
+// -----
+// Extension point for the single-entry form. Three notifiers, one per section, let a
+// companion plugin add fields where they belong rather than in a lump at the end.
+//
+// The array shape is core's own, from NOTIFY_ADMIN_CATEGORIES_EXTRA_INPUTS in
+// admin/categories.php: each entry is
+//
+//   ['label' => ['text' => ..., 'field_name' => ..., 'addl_class' => ..., 'parms' => ...],
+//    'input' => '<html for the field itself>']
+//
+// and THIS page draws the form-group and label wrappers, so an add-on cannot drift away
+// from the page's own markup. Copying core's contract rather than inventing one also
+// means anyone who has written against categories.php already knows this one.
+//
+// With nothing attached, $extra stays empty and the form is exactly what it was in
+// v1.2.2.
+//
+// 'input' is echoed as raw HTML, exactly as core does at admin/categories.php line 361
+// (an `echo $extra_input['input'];` in its own template) - it has to be, since the whole
+// point is that the observer supplies the field markup. The contract: the observer owns escaping
+// anything it puts in there. An add-on redisplaying a posted value after a validation
+// error must escape it itself; this page cannot, without destroying the markup it was
+// handed. The label text goes through zen_draw_label() and is not raw.
+//
+if (!function_exists('aac_extra_inputs')) {
+    function aac_extra_inputs($eventId, $cInfo)
+    {
+        global $zco_notifier;
+
+        $extra = [];
+        $zco_notifier->notify($eventId, $cInfo, $extra);
+        if (empty($extra) || !is_array($extra)) {
+            return;
+        }
+
+        foreach ($extra as $field) {
+            if (!isset($field['label']['text'], $field['label']['field_name'], $field['input'])) {
+                continue;
+            }
+            $addlClass = (isset($field['label']['addl_class'])) ? ' ' . $field['label']['addl_class'] : '';
+            $parms = (isset($field['label']['parms'])) ? ' ' . $field['label']['parms'] : '';
+?>
+                    <div class="form-group">
+                        <?php echo zen_draw_label($field['label']['text'], $field['label']['field_name'], 'class="col-sm-3 control-label' . $addlClass . '"' . $parms); ?>
+                        <div class="col-sm-9 col-md-6">
+                            <?php echo $field['input']; ?>
+                        </div>
+                    </div>
+<?php
+        }
+    }
+}
 ?>
             <?php echo zen_draw_form('customers_1', FILENAME_ADD_CUSTOMERS, '', 'post', 'class="form-horizontal"') .
                        zen_hide_session_id() .
@@ -510,6 +571,7 @@ if ($action === 'add_single') {
                             <?php echo zen_draw_input_field('customers_email_address', htmlspecialchars($cInfo->customers_email_address, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_CUSTOMERS, 'customers_email_address', 50) . ' class="form-control" id="customers_email_address"', true); ?>
                         </div>
                     </div>
+<?php aac_extra_inputs('NOTIFY_ADMIN_ADD_CUSTOMER_EXTRA_INPUTS_PERSONAL', $cInfo); ?>
                 </div>
                 <h3 class="row formAreaTitle"><?php echo CATEGORY_CONTACT; ?></h3>
                 <div class="formArea">
@@ -519,6 +581,7 @@ if ($action === 'add_single') {
                             <?php echo zen_draw_input_field('customers_telephone', htmlspecialchars($cInfo->customers_telephone, ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_CUSTOMERS, 'customers_telephone', 15) . ' class="form-control" id="customers_telephone"', false); ?>
                         </div>
                     </div>
+<?php aac_extra_inputs('NOTIFY_ADMIN_ADD_CUSTOMER_EXTRA_INPUTS_CONTACT', $cInfo); ?>
                 </div>
 
                 <h3 class="row formAreaTitle"><?php echo CATEGORY_OPTIONS; ?></h3>
@@ -557,6 +620,7 @@ if ($wholesaleEnabled) {
                     </div>
 <?php
 }
+aac_extra_inputs('NOTIFY_ADMIN_ADD_CUSTOMER_EXTRA_INPUTS_OPTIONS', $cInfo);
 ?>
                 </div>
                 <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '1', '10'); ?></div>

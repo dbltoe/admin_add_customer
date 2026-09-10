@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: addCustomers.php 2026-08-26 15:49:10Z dbltoe $
+ * @version $Id: addCustomers.php 2026-09-10 16:32:28Z dbltoe $
  */
 // -----
 // This file is only ever loaded by admin/add_customers.php, after application_top.php has run.
@@ -205,6 +205,8 @@ class addCustomers extends base
                                 'customers_whole' => ($this->getValue('wholesale_level', $line) === false) ? '0' : $this->getValue('wholesale_level', $line),
                                 'customers_referral' => '',
                                 'customers_email_format' => (ACCOUNT_EMAIL_PREFERENCE === '1' ? 'HTML' : 'TEXT'),
+                                // See the note on NOTIFY_ADMIN_ADD_CUSTOMER_VALIDATE.
+                                '_aacp_source' => 'csv',
                             ];
 
                             list($notused, $validation_errors) = $this->validateCustomer($values);
@@ -582,6 +584,18 @@ class addCustomers extends base
             $sql_data_array['customers_tax_number'] = $customers_tax_number;
         }
 
+        // -----
+        // Extension point: a companion plugin adding its own columns to the customers
+        // row. Fired with the posted data and the assembled array by reference, right
+        // before the write, so an observer can add keys but nothing this plugin decided
+        // has already been committed.
+        //
+        // Everything above has already been through zen_db_prepare_input(); an observer
+        // adding a key is responsible for its own. zen_db_perform() casts values to
+        // string, and only the literal 'NULL'/'null' becomes a real SQL NULL.
+        //
+        $this->notify('NOTIFY_ADMIN_ADD_CUSTOMER_INSERT', $info, $sql_data_array);
+
         zen_db_perform(TABLE_CUSTOMERS, $sql_data_array);
         $customer_id = $db->Insert_ID();
 
@@ -913,6 +927,19 @@ class addCustomers extends base
                 $errors[] = sprintf(ERROR_UNKNOWN_GROUP_PRICING, $customers_group_pricing);
             }
         }
+
+        // -----
+        // Extension point: a companion plugin validating fields it added to the form.
+        // Fired before the errors are counted, so anything appended here suppresses the
+        // insert exactly as a built-in error would.
+        //
+        // $info carries '_aacp_source' => 'form' | 'csv' so an observer can tell which
+        // entry path it is on. That is set explicitly rather than inferred, because the
+        // two paths have different contracts: the form is a person filling in a screen
+        // and can be asked for more, while a CSV is a file that may have been written
+        // before any add-on was installed.
+        //
+        $this->notify('NOTIFY_ADMIN_ADD_CUSTOMER_VALIDATE', $info, $errors);
 
         if (count($errors)) {
             $cInfo = new objectInfo($info);
