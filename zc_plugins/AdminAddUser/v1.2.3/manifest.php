@@ -47,7 +47,7 @@ return [
     // (customers_whole/Wholesale Pricing) or its own self-contained schema, so it's listed
     // as compatible across that whole range.
     //
-    'zcVersions' => ['v2.0.0', 'v2.1.0', 'v2.2.0', 'v2.2.1', 'v2.2.2', 'v3.0.0'],
+    'zcVersions' => ['v2.0.0', 'v2.1.0', 'v2.2.0', 'v2.2.1', 'v2.2.2', 'v2.3.0', 'v3.0.0'],
     'changelog' => 'readme.html',
     'github_repo' => $aacGithubUrl,
     'pluginGroups' => [],
