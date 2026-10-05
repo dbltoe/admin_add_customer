@@ -29,9 +29,9 @@ $aacLinks =
     . '<a href="' . $aacGithubUrl . '" target="_blank" rel="noopener noreferrer"'
     . ' class="btn btn-primary" role="button"'
     . ' style="margin:0 ' . $aacButtonGap . ' 0 0">GitHub</a>'
-    . '</div>'
-    . '<div style="margin:6px 0 0;padding:0 0 0 ' . $aacButtonGap . '">'
-    . '<a href="' . $aacForumUrl . '" target="_blank" rel="noopener noreferrer">Forum Support Thread</a>'
+    . '<a href="' . $aacForumUrl . '" target="_blank" rel="noopener noreferrer"'
+    . ' class="btn btn-primary" role="button"'
+    . ' style="margin:0 ' . $aacButtonGap . ' 0 0">Forum Support Thread</a>'
     . '</div>';
 
 return [
