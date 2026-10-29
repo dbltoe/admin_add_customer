@@ -19,7 +19,7 @@
 $aacPluginRelativeDir = basename(dirname(__DIR__)) . '/' . basename(__DIR__);
 $aacReadmeUrl = (defined('DIR_WS_CATALOG') ? DIR_WS_CATALOG : '/') . 'zc_plugins/' . $aacPluginRelativeDir . '/readme.html';
 $aacGithubUrl = 'https://github.com/dbltoe/admin_add_customer';
-$aacForumUrl = 'https://www.zen-cart.com/showthread.php/231166-Admin-Add-Customer';
+$aacForumUrl = 'https://www.zen-cart.com/threads/207238';
 // The row is ReadMe | Forum Thread | GitHub, the house row for a plugin with no settings page
 // (this one's admin page is the tool itself), at the house button spacing.
 $aacButtonStyle = ' class="btn btn-primary" role="button" style="margin:0 4px 0 0;padding-left:8px;padding-right:8px"';
