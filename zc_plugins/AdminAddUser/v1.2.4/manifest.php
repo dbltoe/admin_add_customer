@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: manifest.php 2026-09-10 16:32:28Z dbltoe $
+ * @version $Id: manifest.php 2026-10-29 dbltoe $
  */
 // -----
 // Read Me / GitHub buttons shown in the Plugin Manager's info box, matching the pattern
@@ -20,22 +20,18 @@ $aacPluginRelativeDir = basename(dirname(__DIR__)) . '/' . basename(__DIR__);
 $aacReadmeUrl = (defined('DIR_WS_CATALOG') ? DIR_WS_CATALOG : '/') . 'zc_plugins/' . $aacPluginRelativeDir . '/readme.html';
 $aacGithubUrl = 'https://github.com/dbltoe/admin_add_customer';
 $aacForumUrl = 'https://www.zen-cart.com/showthread.php/231166-Admin-Add-Customer';
-$aacButtonGap = '6px';
+// The row is ReadMe | Forum Thread | GitHub, the house row for a plugin with no settings page
+// (this one's admin page is the tool itself), at the house button spacing.
+$aacButtonStyle = ' class="btn btn-primary" role="button" style="margin:0 4px 0 0;padding-left:8px;padding-right:8px"';
 $aacLinks =
-    '<div style="margin:10px 0 0;padding:0 0 0 ' . $aacButtonGap . '">'
-    . '<a href="' . $aacReadmeUrl . '" target="_blank" rel="noopener noreferrer"'
-    . ' class="btn btn-primary" role="button"'
-    . ' style="margin:0 ' . $aacButtonGap . ' 0 0">Read Me</a>'
-    . '<a href="' . $aacGithubUrl . '" target="_blank" rel="noopener noreferrer"'
-    . ' class="btn btn-primary" role="button"'
-    . ' style="margin:0 ' . $aacButtonGap . ' 0 0">GitHub</a>'
-    . '<a href="' . $aacForumUrl . '" target="_blank" rel="noopener noreferrer"'
-    . ' class="btn btn-primary" role="button"'
-    . ' style="margin:0 ' . $aacButtonGap . ' 0 0">Forum Support Thread</a>'
+    '<div style="margin:10px 0 0;padding:0 0 0 4px">'
+    . '<a href="' . $aacReadmeUrl . '" target="_blank" rel="noopener noreferrer"' . $aacButtonStyle . '>ReadMe</a>'
+    . '<a href="' . $aacForumUrl . '" target="_blank" rel="noopener noreferrer"' . $aacButtonStyle . '>Forum Thread</a>'
+    . '<a href="' . $aacGithubUrl . '" target="_blank" rel="noopener noreferrer"' . $aacButtonStyle . '>GitHub</a>'
     . '</div>';
 
 return [
-    'pluginVersion' => 'v1.2.3',
+    'pluginVersion' => 'v1.2.4',
     'pluginName' => 'Admin Add Customer',
     'pluginDescription' => 'Lets a store admin capture minimal customer details (name and email; phone is optional) one-by-one or via CSV bulk upload - e.g. at a public event - optionally assigning a pricing group and/or a wholesale level. Each new customer is emailed an activation link; their account stays pending until they click it and complete their own registration, including their address.' . $aacLinks,
     'pluginAuthor' => 'My Zen Cart Host (dbltoe)',

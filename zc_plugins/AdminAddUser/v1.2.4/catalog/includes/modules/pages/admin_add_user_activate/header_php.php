@@ -5,7 +5,7 @@
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://zen-cart.com GNU Public License V2.0
- * @version $Id: header_php.php 2026-07-26 05:30:22Z dbltoe $
+ * @version $Id: header_php.php 2026-10-29 dbltoe $
  */
 // -----
 // Catalog-side landing page for the activation link emailed by
@@ -52,13 +52,18 @@ foreach ($acfa_lang_define as $acfa_lang_key => $acfa_lang_value) {
 }
 unset($acfa_lang_file, $acfa_lang_define, $acfa_lang_key, $acfa_lang_value);
 
+// -----
+// Every outcome lands on core's login page, which prints only the 'login' message class.
+// add_session() takes the class first ($class, $message, $type); before v1.2.4 these calls
+// passed the message as the class, so none of them was ever shown.
+//
 $acfa_activation = new addCustomersActivation();
 
 $acfa_token = (isset($_GET['token'])) ? trim((string)$_GET['token']) : '';
 $acfa_customer = ($acfa_token !== '') ? $acfa_activation->getPendingCustomerByToken($acfa_token) : false;
 
 if ($acfa_customer === false) {
-    $messageStack->add_session(TEXT_INVALID_TOKEN, 'error');
+    $messageStack->add_session('login', TEXT_INVALID_TOKEN, 'error');
     zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
 }
 
@@ -96,7 +101,7 @@ if ($acfa_coupon !== false) {
 // while customers_authorization silently never actually flipped to approved.
 //
 if ($acfa_activation->completeActivation($acfa_customers_id, $acfa_token) === false) {
-    $messageStack->add_session(TEXT_INVALID_TOKEN, 'error');
+    $messageStack->add_session('login', TEXT_INVALID_TOKEN, 'error');
     zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
 }
 
@@ -104,6 +109,6 @@ $acfa_message = TEXT_ACTIVATION_SUCCESS;
 if (!empty($acfa_summary_lines)) {
     $acfa_message .= ' ' . TEXT_STATUS_INTRO . ' ' . implode(' ', $acfa_summary_lines);
 }
-$messageStack->add_session($acfa_message, 'success');
+$messageStack->add_session('login', $acfa_message, 'success');
 
 zen_redirect(zen_href_link(FILENAME_LOGIN, '', 'SSL'));
