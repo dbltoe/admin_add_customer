@@ -696,12 +696,15 @@ class addCustomers extends base
 
         $name = $customers_firstname . ' ' . $customers_lastname;
 
-        if (ACCOUNT_GENDER === 'true') {
-            if ($customers_gender == 'm') {
-                $email_text = sprintf(EMAIL_GREET_MR, $customers_lastname);
-            } else {
-                $email_text = sprintf(EMAIL_GREET_MS, $customers_lastname);
-            }
+        // -----
+        // Accounts this plugin creates start with no gender (the customer sets it later), so
+        // a blank gender gets the neutral greeting. Treating everything that isn't 'm' as
+        // 'f' greeted every new customer as "Dear Ms." until they set it themselves.
+        //
+        if (ACCOUNT_GENDER === 'true' && $customers_gender === 'm') {
+            $email_text = sprintf(EMAIL_GREET_MR, $customers_lastname);
+        } elseif (ACCOUNT_GENDER === 'true' && $customers_gender === 'f') {
+            $email_text = sprintf(EMAIL_GREET_MS, $customers_lastname);
         } else {
             $email_text = sprintf(EMAIL_GREET_NONE, $customers_firstname);
         }
@@ -859,7 +862,20 @@ class addCustomers extends base
 
         // send additional emails
         if (SEND_EXTRA_CREATE_ACCOUNT_EMAILS_TO_STATUS === '1' && SEND_EXTRA_CREATE_ACCOUNT_EMAILS_TO !== '') {
+            // -----
+            // Core's email_collect_extra_info() reads $_SESSION['customers_ip_address'], which
+            // only a storefront session has; in the admin it logged two "Undefined array key"
+            // warnings per account. Supply the admin's own address for the call, then put the
+            // session back exactly as it was.
+            //
+            $aacIpWasSet = array_key_exists('customers_ip_address', $_SESSION);
+            if (!$aacIpWasSet) {
+                $_SESSION['customers_ip_address'] = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+            }
             $extra_info = email_collect_extra_info($name, $customers_email_address, $customers_firstname . ' ' . $customers_lastname , $customers_email_address);
+            if (!$aacIpWasSet) {
+                unset($_SESSION['customers_ip_address']);
+            }
             $admin_html_msg['EXTRA_INFO'] = $extra_info['HTML'];
             if ($customers_password !== false) {
                 $email_text = str_replace($customers_password, 'xxxx', $email_text);
