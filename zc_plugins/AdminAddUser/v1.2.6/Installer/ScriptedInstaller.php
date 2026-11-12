@@ -52,6 +52,41 @@ class ScriptedInstaller extends ScriptedInstallBase
             $sql = "ALTER TABLE " . TABLE_CUSTOMERS . " ADD COLUMN customers_tax_number VARCHAR(32) NULL DEFAULT NULL AFTER customers_whole";
             $this->executeInstallerSql($sql);
         }
+
+        $this->aacRefreshPluginDescription();
+    }
+
+    // -----
+    // Every step above is safe to repeat, so an upgrade is a re-run of the install.
+    // Zen Cart v2.0.0 passes the old version; nothing here depends on it.
+    //
+    protected function executeUpgrade($oldVersion = null)
+    {
+        return $this->executeInstall();
+    }
+
+    // -----
+    // Save the manifest's description (the Plugin Manager panel, with its ReadMe button)
+    // again. Zen Cart v2.0 and v2.1 store plugin_control.description only when Plugin
+    // Manager first sees the plugin, so without this an upgraded store would keep the
+    // previous version's panel, whose ReadMe button pointed at a file that no longer
+    // exists. v2.2 and later rewrite the description from the manifest on every Plugin
+    // Manager visit, so there this changes nothing.
+    //
+    protected function aacRefreshPluginDescription()
+    {
+        if (!defined('TABLE_PLUGIN_CONTROL')) {
+            return;
+        }
+        $manifest = require dirname(__DIR__) . '/manifest.php';
+        if (!is_array($manifest) || !isset($manifest['pluginDescription'])) {
+            return;
+        }
+        $this->executeInstallerSql(
+            "UPDATE " . TABLE_PLUGIN_CONTROL
+            . " SET description = '" . $this->dbConn->prepare_input($manifest['pluginDescription']) . "'"
+            . " WHERE unique_key = 'AdminAddUser'"
+        );
     }
 
     protected function executeUninstall()
