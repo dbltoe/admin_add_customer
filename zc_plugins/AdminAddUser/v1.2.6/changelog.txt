@@ -190,8 +190,7 @@ v1.1.0
 - CHANGE: `manifest.php`'s Plugin Manager info box now shows Read Me and
   GitHub buttons, matching the pattern used for Social Contact Footer. The
   listed Author changed from a reference to the original
-  add_customers_from_admin mod to "My Zen Cart Host (dbltoe)"; credit to lat9
-  for that original foundation remains in this readme's introduction above.
+  add_customers_from_admin mod to "My Zen Cart Host (dbltoe)".
 - BUGFIX: The new Read Me button pointed at
   `zc_plugins/AdminAddUser/v1.1.0/readme.html`, but this readme (and the
   screenshots/CSV-guide it references) only existed at the repository's root,
