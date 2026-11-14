@@ -4,7 +4,6 @@
 
 Released 2026-11-11.
 
-- **License: GNU General Public License, version 3** (was version 2).
 - **readme.html is replaced by README.md.** The ReadMe button in Plugin Manager opens it inside the admin, for superusers only, in its own window (`index.php?cmd=admin_add_customer_readme`); it is no longer a public file under `zc_plugins/`. The same README.md is at the root of the download.
 - The version history moved out of the readme into `CHANGELOG.md`, with a plain-text copy, `changelog.txt`, in the plugin folder.
 - Upgrading now saves the Plugin Manager panel again, so stores on Zen Cart 2.0 and 2.1, which keep the panel they first saw, get the new ReadMe button too.

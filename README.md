@@ -1,6 +1,6 @@
 # Admin Add Customer
 
-Version 1.2.6 · Zen Cart 2.0.0 through 3.0.0 · PHP 8.0 through 8.5 · GPL v3 · by My Zen Cart Host (dbltoe)
+Version 1.2.6 · Zen Cart 2.0.0 through 3.0.0 · PHP 8.0 through 8.5 · GPL v2 · by My Zen Cart Host (dbltoe)
 
 Add customers from the admin, one-by-one or by CSV bulk upload, with just a name and an e-mail address. Each new customer is emailed an activation link and fills in their own address after logging in.
 
@@ -92,7 +92,7 @@ This plugin also includes the following files that are not part of the installed
 - `/example_customers.csv`: This file contains examples of how you can specify customer data in a CSV file for bulk-upload.
 - `/README.md`: This guide, the same file as the one inside the plugin's folder.
 - `/CHANGELOG.md`: The version history.
-- `/LICENSE`: Contains the GPL v3 license associated with this plugin.
+- `/LICENSE`: Contains the GPL v2 license associated with this plugin.
 - `/screenshot.png`: This file has a screenshot of the *Customers->Add Customer(s)* admin screen.
 - `/warning.png`: Screenshot of core's own address warning, seen by a customer on their first login after activating - see "How Activation Works" above.
 - `/warning_wholesale.png`: Screenshot of core's own wholesale pricing notice, seen by a wholesale customer - see "How Activation Works" above.
@@ -108,9 +108,9 @@ Questions and problem reports go to the Zen Cart forum support thread (https://w
 
 ## Changelog
 
-See `CHANGELOG.md`. Version 1.2.6 moves the plugin to the GNU General Public License, version 3, and replaces readme.html with this guide, opened from the ReadMe button in Plugin Manager.
+See `CHANGELOG.md`. Version 1.2.6 replaces readme.html with this guide, opened from the ReadMe button in Plugin Manager.
 
 ## License
 
-Admin Add Customer is free software under the GNU General Public License, version 3 (https://www.gnu.org/licenses/gpl-3.0.html); the full text is in `LICENSE`. Copyright © 2026 My Zen Cart Host (dbltoe).
+Admin Add Customer is free software under the GNU General Public License, version 2 (https://www.gnu.org/licenses/old-licenses/gpl-2.0.html); the full text is in `LICENSE`. Copyright © 2026 My Zen Cart Host (dbltoe).
 

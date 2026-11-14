@@ -4,7 +4,7 @@
  * @subpackage plugins
  * @copyright Copyright 2003-2026 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
- * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License v3.0
+ * @license  https://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU General Public License v2.0
  * @version $Id: extra_datafiles/filenames.php 2026-08-03 17:27:49Z dbltoe $
  */
 // -----
