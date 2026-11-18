@@ -1,6 +1,27 @@
 Admin Add Customer -- changelog
 ===============================
 
+v1.2.7
+------
+
+Released 2026-11-18.
+
+- An over-long entry is now refused with a clear message instead of being cut
+  short. First name, last name, e-mail address and telephone are checked
+  against the width of the database column before the customer is saved, so a
+  value that is too long comes back as, for example, "First Name must be 32
+  characters or fewer." The form's own limits only ever applied in the browser;
+  anything sent straight to the page bypassed them, and the value was then
+  silently shortened when saved, or refused by the database with no
+  explanation. First and last name are stored in two places, so each is checked
+  against both and reported at whichever is shorter.
+- Nothing else changes: no settings, no database changes, and no change to the
+  welcome e-mail or the activation link.
+
+Upgrading: put the v1.2.7 folder beside the old one and click Upgrade in
+Plugin Manager. Your customers and settings are untouched.
+
+
 v1.2.6
 ------
 

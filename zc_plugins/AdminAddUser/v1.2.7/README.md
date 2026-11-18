@@ -1,6 +1,6 @@
 # Admin Add Customer
 
-Version 1.2.6 · Zen Cart 2.0.0 through 3.0.0 · PHP 8.0 through 8.5 · GPL v2 · by My Zen Cart Host (dbltoe)
+Version 1.2.7 · Zen Cart 2.0.0 through 3.0.0 · PHP 8.0 through 8.5 · GPL v2 · by My Zen Cart Host (dbltoe)
 
 Add customers from the admin, one-by-one or by CSV bulk upload, with just a name and an e-mail address. Each new customer is emailed an activation link and fills in their own address after logging in.
 
@@ -76,13 +76,13 @@ If a customer's activation link expires (24 hours) or is lost, use the *Resend t
 
 This plugin is packaged as a Zen Cart encapsulated plugin (https://docs.zen-cart.com/dev/plugins/encapsulated/). It installs into your store's **root** - the folder that also contains `YOUR_ADMIN`, `includes/`, `email/`, `logs/`, and (since every store already has other encapsulated plugins) a `zc_plugins/` folder of its own. No files are copied into or edited inside `YOUR_ADMIN` itself. As always, **back up** your cart's database and files before making any changes.
 
-1. This repository's own root contains a `zc_plugins/` folder, with this plugin's files inside it at `zc_plugins/AdminAddUser/v1.2.6/`. Upload/copy that entire `zc_plugins/` folder into your store's root, merging it into the `zc_plugins/` folder that's already there. When you're done, your store's `zc_plugins/` directory should contain an `AdminAddUser` folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.
+1. This repository's own root contains a `zc_plugins/` folder, with this plugin's files inside it at `zc_plugins/AdminAddUser/v1.2.7/`. Upload/copy that entire `zc_plugins/` folder into your store's root, merging it into the `zc_plugins/` folder that's already there. When you're done, your store's `zc_plugins/` directory should contain an `AdminAddUser` folder alongside whatever other plugins you already have installed - that's how you can confirm the copy landed in the right place.
 2. In your admin, go to *Tools->Install Plugins* (the Plugin Manager) and install "Admin Add Customer".
 3. Once installed, the tool is available via *Customers->Add Customer(s)*.
 
 No upgrade is needed with this initial installation.
 
-Once it's installed, a superuser can open this guide from the **ReadMe** button in Plugin Manager. The screenshots and the CSV formatting guide are also included inside `zc_plugins/AdminAddUser/v1.2.6/`, so they're still on hand without downloading the package again.
+Once it's installed, a superuser can open this guide from the **ReadMe** button in Plugin Manager. The screenshots and the CSV formatting guide are also included inside `zc_plugins/AdminAddUser/v1.2.7/`, so they're still on hand without downloading the package again.
 
 ### Other Files
 
@@ -108,7 +108,7 @@ Questions and problem reports go to the Zen Cart forum support thread (https://w
 
 ## Changelog
 
-See `CHANGELOG.md`. Version 1.2.6 replaces readme.html with this guide, opened from the ReadMe button in Plugin Manager.
+See `CHANGELOG.md`. Version 1.2.7 refuses an over-long entry with a clear message instead of letting the database cut it short. Version 1.2.6 replaces readme.html with this guide, opened from the ReadMe button in Plugin Manager.
 
 ## License
 

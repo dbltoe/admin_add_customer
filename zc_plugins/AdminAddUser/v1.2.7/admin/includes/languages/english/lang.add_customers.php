@@ -210,6 +210,8 @@ $define = [
     'ERROR_EMAIL_LENGTH' => '"E-Mail Address" must be at least ' . ENTRY_EMAIL_ADDRESS_MIN_LENGTH . ' characters in length.',
     'ERROR_EMAIL_INVALID' => 'The "E-Mail Address" format is not valid.',
     'ERROR_EMAIL_ADDRESS_ERROR_EXISTS' => 'The "E-Mail Address" (%s) already exists.',
+    // %1$s = the field's label, %2$d = the longest the database column will hold.
+    'ERROR_FIELD_TOO_LONG' => '%1$s must be %2$d characters or fewer.',
     'ERROR_STREET_ADDRESS' => '"Street Address" must be at least ' . ENTRY_STREET_ADDRESS_MIN_LENGTH . ' characters in length.',
     'ERROR_CITY' => '"City" must be at least ' . ENTRY_CITY_MIN_LENGTH . ' characters in length.',
     'ERROR_POSTCODE' => '"Post Code" must be at least ' . ENTRY_POSTCODE_MIN_LENGTH . ' characters in length.',

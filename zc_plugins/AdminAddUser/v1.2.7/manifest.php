@@ -39,7 +39,7 @@ $aacLinks =
     . '</div>';
 
 return [
-    'pluginVersion' => 'v1.2.6',
+    'pluginVersion' => 'v1.2.7',
     'pluginName' => 'Admin Add Customer',
     'pluginDescription' => 'Lets a store admin capture minimal customer details (name and email; phone is optional) one-by-one or via CSV bulk upload - e.g. at a public event - optionally assigning a pricing group and/or a wholesale level. Each new customer is emailed an activation link; their account stays pending until they click it and complete their own registration, including their address.' . $aacLinks,
     'pluginAuthor' => 'My Zen Cart Host (dbltoe)',

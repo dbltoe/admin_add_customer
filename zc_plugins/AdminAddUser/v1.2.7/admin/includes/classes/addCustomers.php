@@ -932,6 +932,47 @@ class addCustomers extends base
             $errors[] = $errMsg;
         }
 
+        // -----
+        // Maximum lengths, checked server-side.
+        //
+        // The form's own maxlength attributes come from zen_set_field_length(), but those
+        // are a browser convenience: anything posting straight to this page can exceed them.
+        // Without this, an over-long value reached zen_db_perform() and MySQL either
+        // truncated it silently or, in strict mode, threw - neither of which tells the admin
+        // what went wrong.
+        //
+        // First and last name are written to BOTH customers and address_book, so each is
+        // checked against both columns and reported at whichever is shorter. Zen Cart's own
+        // create_account does the same.
+        //
+        // zen_field_length() is used rather than core's zen_get_field_length_violations():
+        // that helper arrived with Zen Cart 2.3 / 3.0.0, and this plugin supports 1.5.8 and
+        // later. zen_field_length() exists on every supported version and returns the same
+        // number; only 3.0.0 casts it, so it is cast here.
+        //
+        $lengthChecks = [
+            [ENTRY_FIRST_NAME, $customers_firstname, [[TABLE_CUSTOMERS, 'customers_firstname'], [TABLE_ADDRESS_BOOK, 'entry_firstname']]],
+            [ENTRY_LAST_NAME, $customers_lastname, [[TABLE_CUSTOMERS, 'customers_lastname'], [TABLE_ADDRESS_BOOK, 'entry_lastname']]],
+            [ENTRY_EMAIL_ADDRESS, $customers_email_address, [[TABLE_CUSTOMERS, 'customers_email_address']]],
+            [ENTRY_TELEPHONE_NUMBER, $customers_telephone, [[TABLE_CUSTOMERS, 'customers_telephone']]],
+        ];
+        foreach ($lengthChecks as [$label, $value, $columns]) {
+            if ($value === '') {
+                continue;
+            }
+            $maxLength = 0;
+            foreach ($columns as [$table, $column]) {
+                $columnLength = (int)zen_field_length($table, $column);
+                if ($columnLength > 0 && ($maxLength === 0 || $columnLength < $maxLength)) {
+                    $maxLength = $columnLength;
+                }
+            }
+            // A zero means the column could not be measured; never reject on that.
+            if ($maxLength > 0 && strlen($value) > $maxLength) {
+                $errors[] = sprintf(ERROR_FIELD_TOO_LONG, rtrim(trim($label), ':'), $maxLength);
+            }
+        }
+
         if ($customers_group_pricing !== 0) {
             $cgp = $db->Execute(
                 "SELECT group_name
